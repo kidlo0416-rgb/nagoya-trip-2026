@@ -6,7 +6,7 @@
 <title>Nagoya Trip 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Hachi+Maru+Pop&family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg-page:#FAF6EE;
@@ -42,7 +42,6 @@ body{
   color:var(--ink);
   -webkit-font-smoothing:antialiased;
 }
-.cute{font-family:'Hachi Maru Pop','Klee One',sans-serif;}
 
 /* ===== App shell ===== */
 .app-shell{
@@ -68,15 +67,15 @@ body{
   position:fixed;bottom:0;left:0;right:0;max-width:460px;margin:0 auto;
   display:flex;justify-content:space-around;align-items:center;
   background:rgba(255,252,246,0.94);backdrop-filter:blur(14px);
-  border-top:1px solid var(--line);padding:10px 6px calc(10px + env(safe-area-inset-bottom));z-index:50;
+  border-top:1px solid var(--line);padding:9px 2px calc(9px + env(safe-area-inset-bottom));z-index:50;
 }
 .nav-tab{
-  flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;
   background:none;border:none;cursor:pointer;font-family:inherit;color:var(--ink-soft);
-  padding:4px 0;border-radius:14px;transition:all .2s;
+  padding:3px 0;border-radius:14px;transition:all .2s;min-width:0;
 }
-.nav-tab .nav-icon{font-size:20px;line-height:1;transition:transform .2s;}
-.nav-tab .nav-label{font-size:10.5px;font-weight:700;}
+.nav-tab .nav-icon{font-size:18px;line-height:1;transition:transform .2s;}
+.nav-tab .nav-label{font-size:9.5px;font-weight:700;white-space:nowrap;}
 .nav-tab.active{color:var(--red-deep);}
 .nav-tab.active .nav-icon{transform:translateY(-2px) scale(1.08);}
 
@@ -93,28 +92,39 @@ body{
 .tab-content{padding:4px 18px 10px;}
 .card{background:var(--card);border-radius:var(--r-lg);box-shadow:var(--shadow);padding:16px;margin-bottom:14px;position:relative;}
 .card-title{font-size:15px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
-.card-title.cute{font-size:16px;}
 .section-title{font-size:13px;font-weight:700;color:var(--ink-soft);letter-spacing:1px;margin:16px 4px 9px;}
 
 /* ===== Day tabs ===== */
-.day-tabs{display:flex;gap:7px;overflow-x:auto;padding:6px 0 12px;scrollbar-width:none;}
-.day-tabs::-webkit-scrollbar{display:none;}
-.day-pill{
-  flex:0 0 auto;padding:8px 14px;border-radius:999px;border:none;font-family:inherit;
-  font-weight:700;font-size:12.5px;white-space:nowrap;background:#fff;color:var(--ink-soft);
-  box-shadow:var(--shadow-sm);cursor:pointer;transition:all .2s;
+.day-tabs-wrap{position:relative;}
+.day-tabs-wrap::after{
+  content:'';position:absolute;right:0;top:0;bottom:12px;width:28px;
+  background:linear-gradient(90deg, rgba(250,246,238,0) 0%, rgba(250,246,238,0.95) 75%);
+  pointer-events:none;
 }
-.day-pill.active{background:linear-gradient(135deg, var(--red) 0%, var(--green-acc) 100%);color:#fff;box-shadow:0 3px 10px rgba(180,140,100,0.25);}
+.day-tabs{display:flex;gap:8px;overflow-x:auto;padding:6px 0 12px;scrollbar-width:none;-webkit-overflow-scrolling:touch;touch-action:pan-x;cursor:grab;}
+.day-tabs::-webkit-scrollbar{display:none;}
 
-/* Stacked "DAY1 / 8/20" pill used in the expense tab day selector */
-.date-pill{
-  flex:0 0 auto;min-width:60px;padding:8px 10px;border-radius:16px;border:none;font-family:inherit;
+/* Unified calendar-card pill: weekday+ordinal on top, big date number, month below */
+.day-pill, .date-pill{
+  flex:0 0 auto;width:58px;padding:10px 4px 9px;border-radius:16px;border:none;font-family:inherit;
   background:#fff;color:var(--ink-soft);box-shadow:var(--shadow-sm);cursor:pointer;transition:all .2s;
   display:flex;flex-direction:column;align-items:center;gap:1px;
 }
-.date-pill .dp-daylabel{font-size:10px;font-weight:700;line-height:1.1;letter-spacing:0.5px;opacity:0.75;}
-.date-pill .dp-date{font-size:13.5px;font-weight:700;line-height:1.2;white-space:nowrap;}
-.date-pill.active{background:linear-gradient(135deg, var(--red) 0%, var(--green-acc) 100%);color:#fff;box-shadow:0 3px 10px rgba(180,140,100,0.25);}
+.day-pill .dp-weekday, .date-pill .dp-weekday{
+  font-size:10.5px;font-weight:700;letter-spacing:0.5px;line-height:1.1;opacity:0.7;text-transform:uppercase;
+}
+.day-pill .dp-weekday sup, .date-pill .dp-weekday sup{font-size:7.5px;margin-left:1px;}
+.day-pill .dp-date, .date-pill .dp-date{font-size:19px;font-weight:700;line-height:1.15;margin:1px 0;}
+.day-pill .dp-month, .date-pill .dp-month{font-size:9.5px;font-weight:600;opacity:0.65;line-height:1.1;}
+.day-pill.active, .date-pill.active{background:linear-gradient(135deg, var(--red) 0%, var(--green-acc) 100%);color:#fff;box-shadow:0 3px 10px rgba(180,140,100,0.25);}
+.day-pill.active .dp-weekday, .day-pill.active .dp-month,
+.date-pill.active .dp-weekday, .date-pill.active .dp-month{opacity:0.85;}
+
+/* 戰術總覽 pill keeps the original pill shape since it isn't a date */
+.day-pill.overview-pill{
+  width:auto;flex-direction:row;align-items:center;gap:6px;padding:8px 14px;
+  font-weight:700;font-size:12.5px;white-space:nowrap;
+}
 
 /* ===== Weather card (icon-based, live) ===== */
 .weather-card{
@@ -195,6 +205,28 @@ body{
 .phrase-zh{color:#9B8B79;font-weight:500;}
 .activity-budget{margin-top:8px;font-size:12px;font-weight:700;color:#A1822E;background:var(--cream);display:inline-block;padding:5px 9px;border-radius:var(--r-sm);}
 .activity-footer{display:flex;justify-content:flex-end;margin-top:8px;}
+
+/* Edit/delete icon row, used across itinerary, packing, shopping, and expense items */
+.item-actions{display:flex;gap:6px;flex:0 0 auto;}
+.icon-btn{
+  width:28px;height:28px;border-radius:50%;border:none;background:var(--cream);
+  display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;
+  color:var(--ink-soft);flex:0 0 28px;transition:background .15s;
+}
+.icon-btn.edit-btn:hover{background:var(--blue);}
+.icon-btn.delete-btn:hover{background:var(--pink);}
+.inline-edit-form{display:flex;flex-direction:column;gap:8px;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);}
+.inline-edit-form input, .inline-edit-form textarea{
+  border:1.5px solid var(--line);border-radius:var(--r-sm);padding:9px 11px;font-size:13px;
+  font-family:inherit;color:var(--ink);background:#FCFAF4;width:100%;resize:vertical;
+}
+.inline-edit-form input:focus, .inline-edit-form textarea:focus{outline:2px solid var(--red);}
+.inline-edit-row{display:flex;gap:8px;}
+.inline-edit-row > *{flex:1;}
+.inline-edit-actions{display:flex;gap:8px;}
+.inline-edit-actions .btn-save{flex:1;background:var(--green-deep);color:#fff;border:none;border-radius:var(--r-sm);padding:9px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;}
+.inline-edit-actions .btn-cancel{background:var(--line);color:var(--ink-soft);border:none;border-radius:var(--r-sm);padding:9px 16px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;}
+
 .nav-btn{
   border:none;border-radius:999px;padding:7px 14px;font-size:12px;font-weight:700;
   background:linear-gradient(135deg, var(--green-acc) 0%, var(--green-deep) 100%);
@@ -244,6 +276,19 @@ body{
 .pack-item{display:flex;align-items:center;gap:11px;background:var(--card);border-radius:var(--r-md);padding:11px 13px;margin-bottom:7px;box-shadow:var(--shadow-sm);}
 .pack-text{font-size:13px;font-weight:600;line-height:1.5;transition:all .3s;flex:1;}
 .pack-item.done .pack-text{opacity:0.42;text-decoration:line-through;}
+
+/* Shopping list */
+.shop-item{display:flex;align-items:center;gap:11px;background:var(--card);border-radius:var(--r-md);padding:11px 13px;margin-bottom:7px;box-shadow:var(--shadow-sm);}
+.shop-info{flex:1;min-width:0;}
+.shop-text{font-size:13.5px;font-weight:600;line-height:1.5;transition:all .3s;}
+.shop-source{font-size:10.5px;color:var(--ink-soft);font-weight:600;margin-top:2px;}
+.shop-item.done .shop-text{opacity:0.42;text-decoration:line-through;}
+.shop-item.done .shop-source{opacity:0.42;}
+.shop-delete{background:none;border:none;color:var(--ink-faint);font-size:15px;cursor:pointer;padding:4px 6px;flex:0 0 auto;}
+.shop-add-row{display:flex;gap:8px;margin-top:4px;}
+.shop-add-row input{flex:1;border:1.5px solid var(--line);border-radius:var(--r-sm);padding:10px 12px;font-size:13.5px;font-family:inherit;color:var(--ink);background:#FCFAF4;}
+.shop-add-row input:focus{outline:2px solid var(--red);}
+.shop-add-btn{background:var(--green-deep);color:#fff;border:none;border-radius:var(--r-sm);padding:10px 16px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;white-space:nowrap;}
 
 /* Expense - daily */
 .total-card{background:linear-gradient(135deg, #E8C9AE 0%, #E3D2AE 45%, var(--green-soft) 100%);color:var(--ink);border-radius:var(--r-lg);padding:20px;margin-bottom:14px;box-shadow:var(--shadow);position:relative;overflow:hidden;text-align:center;}
@@ -369,6 +414,9 @@ body{
   </button>
   <button class="nav-tab" data-tab="packing" onclick="switchTab('packing')">
     <span class="nav-icon">🎒</span><span class="nav-label">行前準備</span>
+  </button>
+  <button class="nav-tab" data-tab="shopping" onclick="switchTab('shopping')">
+    <span class="nav-icon">🛍️</span><span class="nav-label">購物清單</span>
   </button>
   <button class="nav-tab" data-tab="expense" onclick="switchTab('expense')">
     <span class="nav-icon">💰</span><span class="nav-label">每日花費</span>
@@ -720,15 +768,15 @@ let dailyExpenses = {
   ]
 };
 const dayLabels = {day1:'DAY1 8/20', day2:'DAY2 8/21', day3:'DAY3 8/22', day4:'DAY4 8/23', day5:'DAY5 8/24', day6:'DAY6 8/25', day7:'DAY7 8/26'};
-// Weekday + date number for the expense tab's stacked day-pill selector (e.g. Fri / 6 style, here using the trip's actual weekdays).
+// Weekday + date + month for the unified calendar-card pill style used by both the itinerary and expense day selectors.
 const dayDateInfo = {
-  day1:{weekday:'Thu', date:'20'},
-  day2:{weekday:'Fri', date:'21'},
-  day3:{weekday:'Sat', date:'22'},
-  day4:{weekday:'Sun', date:'23'},
-  day5:{weekday:'Mon', date:'24'},
-  day6:{weekday:'Tue', date:'25'},
-  day7:{weekday:'Wed', date:'26'}
+  day1:{weekday:'Thu', date:'20', month:'08月'},
+  day2:{weekday:'Fri', date:'21', month:'08月'},
+  day3:{weekday:'Sat', date:'22', month:'08月'},
+  day4:{weekday:'Sun', date:'23', month:'08月'},
+  day5:{weekday:'Mon', date:'24', month:'08月'},
+  day6:{weekday:'Tue', date:'25', month:'08月'},
+  day7:{weekday:'Wed', date:'26', month:'08月'}
 };
 
 /* ===== AI Chat Preset Conversation ===== */
@@ -751,11 +799,25 @@ let openDetailIds = {};
 let expenseFormOpenDay = null;
 let currentExpenseDay = 'day1';
 let editingExpenseId = null;
+let editingActivitySortId = null;
+let editingPackKey = null;
+let editingShoppingId = null;
+let shoppingChecked = {};
+let customShoppingItems = [];
 
 const STORAGE_KEY_ORDER = 'jp2026_activity_order_v1';
 const STORAGE_KEY_CHECKED = 'jp2026_checked_v1';
 const STORAGE_KEY_PACKING = 'jp2026_packing_v1';
 const STORAGE_KEY_EXPENSES = 'jp2026_expenses_v1';
+const STORAGE_KEY_SHOPPING_CHECKED = 'jp2026_shopping_checked_v1';
+const STORAGE_KEY_SHOPPING_CUSTOM = 'jp2026_shopping_custom_v1';
+const STORAGE_KEY_ACTIVITY_EDITS = 'jp2026_activity_edits_v1';
+const STORAGE_KEY_ACTIVITY_DELETES = 'jp2026_activity_deletes_v1';
+const STORAGE_KEY_PACKING_EDITS = 'jp2026_packing_edits_v1';
+const STORAGE_KEY_PACKING_DELETES = 'jp2026_packing_deletes_v1';
+const STORAGE_KEY_PACKING_CUSTOM = 'jp2026_packing_custom_v1';
+const STORAGE_KEY_SHOPPING_AUTO_EDITS = 'jp2026_shopping_auto_edits_v1';
+const STORAGE_KEY_SHOPPING_AUTO_DELETES = 'jp2026_shopping_auto_deletes_v1';
 
 function loadFromStorage(key, fallback){
   try{
@@ -785,10 +847,115 @@ function applySavedOrder(){
 }
 applySavedOrder();
 
+// Apply saved field edits (time/title/desc/budget overrides keyed by sortId) and
+// remove any activities the person deleted, so both survive across reloads.
+let activityEdits = loadFromStorage(STORAGE_KEY_ACTIVITY_EDITS, {});
+let activityDeletes = loadFromStorage(STORAGE_KEY_ACTIVITY_DELETES, {});
+function applyActivityEditsAndDeletes(){
+  tripDays.forEach(day=>{
+    day.activities = day.activities.filter(a=>!activityDeletes[a.sortId]);
+    day.activities.forEach(a=>{
+      const edit = activityEdits[a.sortId];
+      if(edit){
+        if(edit.time !== undefined) a.time = edit.time;
+        if(edit.title !== undefined) a.title = edit.title;
+        if(edit.desc !== undefined) a.desc = edit.desc;
+        if(edit.budget !== undefined) a.budget = edit.budget;
+      }
+    });
+  });
+}
+applyActivityEditsAndDeletes();
+
 checkedItems = loadFromStorage(STORAGE_KEY_CHECKED, {});
 packingChecked = loadFromStorage(STORAGE_KEY_PACKING, {});
 const savedExpenses = loadFromStorage(STORAGE_KEY_EXPENSES, null);
 if(savedExpenses) dailyExpenses = savedExpenses;
+shoppingChecked = loadFromStorage(STORAGE_KEY_SHOPPING_CHECKED, {});
+customShoppingItems = loadFromStorage(STORAGE_KEY_SHOPPING_CUSTOM, []);
+
+/* =========================================================
+   AUTO-AGGREGATED SHOPPING LIST
+   Scans every day's activities (including restaurant-group
+   options) for tags of type 'buy', splits multi-item text on
+   slashes, and produces one checkable line per item with a
+   reference back to which day/spot it came from.
+   ========================================================= */
+function getAutoShoppingItems(){
+  let shoppingAutoEdits = loadFromStorage(STORAGE_KEY_SHOPPING_AUTO_EDITS, {});
+  let shoppingAutoDeletes = loadFromStorage(STORAGE_KEY_SHOPPING_AUTO_DELETES, {});
+  const items = [];
+  tripDays.forEach(day=>{
+    day.activities.forEach(act=>{
+      const sources = act.type === 'rgroup' ? (act.options||[]) : [act];
+      sources.forEach(src=>{
+        (src.tags||[]).forEach(tag=>{
+          if(tag.type !== 'buy') return;
+          tag.text.split(/[／/、]/).map(s=>s.trim()).filter(Boolean).forEach(piece=>{
+            const id = 'auto:' + day.id + ':' + (src.sortId||src.name||src.title) + ':' + piece;
+            if(shoppingAutoDeletes[id]) return;
+            items.push({
+              id,
+              text: shoppingAutoEdits[id] !== undefined ? shoppingAutoEdits[id] : piece,
+              source: day.label + '　' + (src.title || src.name || '')
+            });
+          });
+        });
+      });
+    });
+  });
+  return items;
+}
+
+/* =========================================================
+   DESKTOP SCROLL SUPPORT FOR HORIZONTAL DAY-TABS ROWS
+   Touch users can swipe naturally, but a desktop mouse has no
+   horizontal gesture by default. This lets people click-and-drag
+   the row, and also remaps vertical wheel scroll to horizontal
+   when hovering over it (most mice only scroll vertically).
+   ========================================================= */
+function enableHorizontalScrollDrag(selector){
+  document.querySelectorAll(selector).forEach(el=>{
+    if(el.dataset.hscrollBound) return; // avoid double-binding on re-render
+    el.dataset.hscrollBound = '1';
+
+    let isDown = false;
+    let startX = 0;
+    let startScroll = 0;
+
+    el.addEventListener('mousedown', (e)=>{
+      isDown = true;
+      startX = e.pageX;
+      startScroll = el.scrollLeft;
+      el.style.cursor = 'grabbing';
+    });
+    window.addEventListener('mouseup', ()=>{
+      isDown = false;
+      el.style.cursor = '';
+    });
+    window.addEventListener('mousemove', (e)=>{
+      if(!isDown) return;
+      e.preventDefault();
+      const dx = e.pageX - startX;
+      el.scrollLeft = startScroll - dx;
+    });
+    // Suppress the click that follows a real drag, so dragging doesn't
+    // accidentally also select whichever pill the cursor lands on.
+    el.addEventListener('click', (e)=>{
+      if(Math.abs(el.scrollLeft - startScroll) > 5){
+        e.stopPropagation();
+        e.preventDefault();
+      }
+    }, true);
+
+    el.addEventListener('wheel', (e)=>{
+      if(Math.abs(e.deltaY) > Math.abs(e.deltaX)){
+        el.scrollLeft += e.deltaY;
+        e.preventDefault();
+      }
+    }, {passive:false});
+  });
+}
 
 function uid(prefix, dayId, idx, sub){
   return prefix + ':' + dayId + ':' + idx + (sub!==undefined? ':'+sub : '');
@@ -842,12 +1009,17 @@ function renderPhoto(photo, credit, alt){
    ========================================================= */
 function renderItinerary(){
   let html = '';
-  html += '<div class="day-tabs">';
-  html += `<button class="day-pill ${currentDay==='overview'?'active':''}" onclick="selectDay('overview')">🗺️ 戰術總覽</button>`;
+  html += '<div class="day-tabs-wrap"><div class="day-tabs">';
+  html += `<button class="day-pill overview-pill ${currentDay==='overview'?'active':''}" onclick="selectDay('overview')">🗺️ 戰術總覽</button>`;
   tripDays.forEach(d=>{
-    html += `<button class="day-pill ${currentDay===d.id?'active':''}" onclick="selectDay('${d.id}')">${d.label}</button>`;
+    const info = dayDateInfo[d.id] || {weekday:'', date:'', month:''};
+    html += `<button class="day-pill ${currentDay===d.id?'active':''}" onclick="selectDay('${d.id}')">
+      <span class="dp-weekday">${info.weekday}<sup>日</sup></span>
+      <span class="dp-date">${info.date}</span>
+      <span class="dp-month">${info.month}</span>
+    </button>`;
   });
-  html += '</div>';
+  html += '</div></div>';
 
   if(currentDay === 'overview'){
     html += renderOverview();
@@ -863,17 +1035,18 @@ function renderItinerary(){
     loadWeatherFor(dayObj);
     attachDragHandlers(dayObj.id);
   }
+  enableHorizontalScrollDrag('.day-tabs');
 }
 
 function renderOverview(){
   let html = '<div class="tab-inner">';
-  html += `<div class="team-card cute">
+  html += `<div class="team-card">
     <div class="team-label">特攻隊編成</div>
     <div class="team-name">${overview.team}</div>
     <div class="team-dates">📅 ${overview.dates}</div>
   </div>`;
 
-  html += '<div class="card"><div class="card-title cute">🧭 移動大動線</div><div class="route-timeline">';
+  html += '<div class="card"><div class="card-title">🧭 移動大動線</div><div class="route-timeline">';
   overview.route.forEach(node=>{
     if(node.type==='transport'){
       html += `<div class="route-connector"><span class="conn-pill">${node.icon}</span><span class="conn-label">${node.label}</span></div>`;
@@ -884,7 +1057,7 @@ function renderOverview(){
   });
   html += '</div></div>';
 
-  html += '<div class="card pocket-card"><div class="card-title cute">🎒 口袋名單備用區</div>';
+  html += '<div class="card pocket-card"><div class="card-title">🎒 口袋名單備用區</div>';
   pocketList.forEach(p=>{
     const done = !!checkedItems[p.id];
     html += `<div class="pocket-item ${done?'done':''}">
@@ -904,7 +1077,7 @@ function renderDay(day){
       <div class="weather-icon-box" id="weather-icon-${day.id}">🌤️</div>
       <div class="weather-mid">
         <div class="weather-daylabel">${day.date}</div>
-        <div class="day-mission-title cute">${day.title}</div>
+        <div class="day-mission-title">${day.title}</div>
       </div>
     </div>
     <div class="weather-stats-row">
@@ -947,13 +1120,22 @@ function renderDay(day){
       const id = uid('a', day.id, idx);
       const done = !!checkedItems[id];
       const detailId = id + ':detail';
-      html += `<div class="card activity-card ${done?'done':''}" draggable="true" data-sortid="${act.sortId}">
+      const isEditing = editingActivitySortId === act.sortId;
+      html += `<div class="card activity-card ${done?'done':''}" draggable="${!isEditing}" data-sortid="${act.sortId}">
         <div class="activity-row">
           <div class="drag-handle" aria-label="拖曳排序">⠿</div>
           <div class="check-circle ${done?'checked':''}" onclick="toggleCheck('${id}')">${done?'✓':''}</div>
           <div class="activity-content">
-            <div class="activity-time">${act.time||''}</div>
-            <div class="activity-title">${act.title}</div>
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
+              <div style="flex:1;min-width:0;">
+                <div class="activity-time">${act.time||''}</div>
+                <div class="activity-title">${act.title}</div>
+              </div>
+              <div class="item-actions">
+                <button class="icon-btn edit-btn" aria-label="編輯" onclick="toggleEditActivity('${day.id}','${act.sortId}')">✏️</button>
+                <button class="icon-btn delete-btn" aria-label="刪除" onclick="deleteActivity('${day.id}','${act.sortId}')">🗑️</button>
+              </div>
+            </div>
             <div class="activity-desc">${act.desc||''}</div>
             ${renderPhoto(act.photo, act.photoCredit, act.title)}
             ${renderTags(act.tags)}
@@ -961,6 +1143,19 @@ function renderDay(day){
             ${act.budget? `<div class="activity-budget">💰 ${act.budget}</div>` : ''}
             ${renderDetailToggle(detailId, act.detail)}
             ${act.nav? `<div class="activity-footer"><button class="nav-btn" onclick="openMapsPopup('${escapeQ(act.title)}','${escapeQ(act.nav)}')">🗺️ 導覽</button></div>` : ''}
+            ${isEditing? `
+            <div class="inline-edit-form" onclick="event.stopPropagation()">
+              <div class="inline-edit-row">
+                <input type="text" id="edit-time-${act.sortId}" placeholder="時間" value="${escapeHtml(act.time||'')}">
+              </div>
+              <input type="text" id="edit-title-${act.sortId}" placeholder="標題" value="${escapeHtml(act.title||'')}">
+              <textarea id="edit-desc-${act.sortId}" rows="3" placeholder="詳細描述">${escapeHtml(act.desc||'')}</textarea>
+              <input type="text" id="edit-budget-${act.sortId}" placeholder="預算費用（選填）" value="${escapeHtml(act.budget||'')}">
+              <div class="inline-edit-actions">
+                <button class="btn-cancel" onclick="cancelEditActivity()">取消</button>
+                <button class="btn-save" onclick="saveEditActivity('${day.id}','${act.sortId}')">儲存修改</button>
+              </div>
+            </div>` : ''}
           </div>
         </div>
       </div>`;
@@ -979,6 +1174,51 @@ function toggleCheck(id){
   checkedItems[id] = !checkedItems[id];
   saveToStorage(STORAGE_KEY_CHECKED, checkedItems);
   if(currentTab === 'itinerary') renderItinerary();
+}
+
+function toggleEditActivity(dayId, sortId){
+  editingActivitySortId = (editingActivitySortId === sortId) ? null : sortId;
+  renderItinerary();
+}
+
+function cancelEditActivity(){
+  editingActivitySortId = null;
+  renderItinerary();
+}
+
+function saveEditActivity(dayId, sortId){
+  const time = document.getElementById('edit-time-'+sortId).value.trim();
+  const title = document.getElementById('edit-title-'+sortId).value.trim();
+  const desc = document.getElementById('edit-desc-'+sortId).value.trim();
+  const budget = document.getElementById('edit-budget-'+sortId).value.trim();
+  if(!title){
+    document.getElementById('edit-title-'+sortId).style.outline = '2px solid var(--red)';
+    return;
+  }
+  const day = tripDays.find(d=>d.id===dayId);
+  const act = day && day.activities.find(a=>a.sortId===sortId);
+  if(act){
+    act.time = time;
+    act.title = title;
+    act.desc = desc;
+    act.budget = budget || undefined;
+  }
+  activityEdits[sortId] = {time, title, desc, budget: budget || ''};
+  saveToStorage(STORAGE_KEY_ACTIVITY_EDITS, activityEdits);
+  editingActivitySortId = null;
+  renderItinerary();
+}
+
+function deleteActivity(dayId, sortId){
+  const day = tripDays.find(d=>d.id===dayId);
+  if(!day) return;
+  day.activities = day.activities.filter(a=>a.sortId!==sortId);
+  activityDeletes[sortId] = true;
+  saveToStorage(STORAGE_KEY_ACTIVITY_DELETES, activityDeletes);
+  delete activityEdits[sortId];
+  saveToStorage(STORAGE_KEY_ACTIVITY_EDITS, activityEdits);
+  editingActivitySortId = null;
+  renderItinerary();
 }
 
 /* =========================================================
@@ -1107,12 +1347,30 @@ function attachDragHandlers(dayId){
 /* =========================================================
    RENDER: PACKING TAB
    ========================================================= */
+let packingCustomItems = loadFromStorage(STORAGE_KEY_PACKING_CUSTOM, []);
+let packingItemEdits = loadFromStorage(STORAGE_KEY_PACKING_EDITS, {});
+let packingItemDeletes = loadFromStorage(STORAGE_KEY_PACKING_DELETES, {});
+
+function getPackingCategoryItems(ci, cat){
+  const items = [];
+  cat.items.forEach((item, ii)=>{
+    const key = ci+'-'+ii;
+    if(packingItemDeletes[key]) return;
+    items.push({key, text: packingItemEdits[key] !== undefined ? packingItemEdits[key] : item, isCustom:false});
+  });
+  packingCustomItems.filter(c=>c.cat===ci).forEach(c=>{
+    if(packingItemDeletes[c.key]) return;
+    items.push({key:c.key, text: packingItemEdits[c.key] !== undefined ? packingItemEdits[c.key] : c.text, isCustom:true});
+  });
+  return items;
+}
+
 function renderPacking(){
   let total = 0, done = 0;
   packingData.forEach((cat,ci)=>{
-    cat.items.forEach((item,ii)=>{
+    getPackingCategoryItems(ci, cat).forEach(it=>{
       total++;
-      if(packingChecked[ci+'-'+ii]) done++;
+      if(packingChecked[it.key]) done++;
     });
   });
   const pct = total? Math.round(done/total*100) : 0;
@@ -1128,14 +1386,32 @@ function renderPacking(){
 
   packingData.forEach((cat,ci)=>{
     html += `<div class="pack-cat"><div class="pack-cat-title">${cat.icon} ${cat.cat}</div>`;
-    cat.items.forEach((item,ii)=>{
-      const key = ci+'-'+ii;
-      const isDone = !!packingChecked[key];
-      html += `<div class="pack-item ${isDone?'done':''}">
-        <div class="check-circle ${isDone?'checked':''}" onclick="togglePack('${key}')">${isDone?'✓':''}</div>
-        <div class="pack-text">${item}</div>
+    getPackingCategoryItems(ci, cat).forEach(it=>{
+      const isDone = !!packingChecked[it.key];
+      const isEditing = editingPackKey === it.key;
+      html += `<div class="pack-item ${isDone?'done':''}" style="flex-direction:column;align-items:stretch;">
+        <div style="display:flex;align-items:center;gap:11px;">
+          <div class="check-circle ${isDone?'checked':''}" onclick="togglePack('${it.key}')">${isDone?'✓':''}</div>
+          <div class="pack-text">${escapeHtml(it.text)}</div>
+          <div class="item-actions">
+            <button class="icon-btn edit-btn" aria-label="編輯" onclick="toggleEditPack('${it.key}')">✏️</button>
+            <button class="icon-btn delete-btn" aria-label="刪除" onclick="deletePackItem('${it.key}')">🗑️</button>
+          </div>
+        </div>
+        ${isEditing? `
+        <div class="inline-edit-form">
+          <input type="text" id="edit-pack-${it.key}" value="${escapeHtml(it.text)}">
+          <div class="inline-edit-actions">
+            <button class="btn-cancel" onclick="cancelEditPack()">取消</button>
+            <button class="btn-save" onclick="savePackEdit('${it.key}')">儲存修改</button>
+          </div>
+        </div>` : ''}
       </div>`;
     });
+    html += `<div class="shop-add-row" style="margin-top:8px;">
+      <input type="text" id="pack-new-input-${ci}" placeholder="新增 ${cat.cat} 項目..." onkeydown="if(event.key==='Enter')addPackItem(${ci})">
+      <button class="shop-add-btn" onclick="addPackItem(${ci})">＋ 新增</button>
+    </div>`;
     html += '</div>';
   });
 
@@ -1147,6 +1423,206 @@ function togglePack(key){
   packingChecked[key] = !packingChecked[key];
   saveToStorage(STORAGE_KEY_PACKING, packingChecked);
   renderPacking();
+}
+
+function toggleEditPack(key){
+  editingPackKey = (editingPackKey === key) ? null : key;
+  renderPacking();
+}
+
+function cancelEditPack(){
+  editingPackKey = null;
+  renderPacking();
+}
+
+function savePackEdit(key){
+  const input = document.getElementById('edit-pack-'+key);
+  const text = input.value.trim();
+  if(!text){ input.style.outline = '2px solid var(--red)'; return; }
+  packingItemEdits[key] = text;
+  saveToStorage(STORAGE_KEY_PACKING_EDITS, packingItemEdits);
+  // Keep custom-item source text in sync too, so re-renders show the edit consistently.
+  const custom = packingCustomItems.find(c=>c.key===key);
+  if(custom) custom.text = text;
+  saveToStorage(STORAGE_KEY_PACKING_CUSTOM, packingCustomItems);
+  editingPackKey = null;
+  renderPacking();
+}
+
+function deletePackItem(key){
+  packingItemDeletes[key] = true;
+  saveToStorage(STORAGE_KEY_PACKING_DELETES, packingItemDeletes);
+  packingCustomItems = packingCustomItems.filter(c=>c.key!==key);
+  saveToStorage(STORAGE_KEY_PACKING_CUSTOM, packingCustomItems);
+  delete packingChecked[key];
+  saveToStorage(STORAGE_KEY_PACKING, packingChecked);
+  renderPacking();
+}
+
+function addPackItem(ci){
+  const input = document.getElementById('pack-new-input-'+ci);
+  const text = (input.value||'').trim();
+  if(!text) return;
+  const key = 'custom-' + ci + '-' + Date.now();
+  packingCustomItems.push({key, cat:ci, text});
+  saveToStorage(STORAGE_KEY_PACKING_CUSTOM, packingCustomItems);
+  renderPacking();
+}
+
+/* =========================================================
+   RENDER: SHOPPING LIST TAB
+   Combines auto-aggregated 必買伴手禮 items from the itinerary
+   with manually-added custom items, all checkable and persisted.
+   ========================================================= */
+function renderShopping(){
+  const autoItems = getAutoShoppingItems();
+  const allItems = [...autoItems, ...customShoppingItems];
+  const total = allItems.length;
+  const done = allItems.filter(it=>shoppingChecked[it.id]).length;
+  const pct = total? Math.round(done/total*100) : 0;
+
+  let html = '<div class="tab-inner">';
+  html += `<div class="progress-wrap">
+    <div class="progress-headline">
+      <div class="big">${pct}% 已購買</div>
+      <div class="small">${done} / ${total} 項</div>
+    </div>
+    <div class="progress-track"><div class="progress-fill" style="width:${pct}%;"></div></div>
+  </div>`;
+
+  html += '<div class="card"><div class="card-title">🎁 行程自動彙整的必買清單</div>';
+  if(autoItems.length === 0){
+    html += `<div style="font-size:12.5px;color:var(--ink-soft);font-weight:600;padding:6px 0;">目前行程中沒有標記必買項目</div>`;
+  }
+  autoItems.forEach(it=>{
+    const isDone = !!shoppingChecked[it.id];
+    const isEditing = editingShoppingId === it.id;
+    html += `<div class="shop-item ${isDone?'done':''}" style="flex-direction:column;align-items:stretch;">
+      <div style="display:flex;align-items:center;gap:11px;">
+        <div class="check-circle ${isDone?'checked':''}" onclick="toggleShopping('${escapeQ(it.id)}')">${isDone?'✓':''}</div>
+        <div class="shop-info">
+          <div class="shop-text">${escapeHtml(it.text)}</div>
+          <div class="shop-source">📍 ${escapeHtml(it.source)}</div>
+        </div>
+        <div class="item-actions">
+          <button class="icon-btn edit-btn" aria-label="編輯" onclick="toggleEditShopping('${escapeQ(it.id)}')">✏️</button>
+          <button class="icon-btn delete-btn" aria-label="刪除" onclick="deleteAutoShoppingItem('${escapeQ(it.id)}')">🗑️</button>
+        </div>
+      </div>
+      ${isEditing? `
+      <div class="inline-edit-form">
+        <input type="text" id="edit-shop-${escapeHtml(it.id)}" value="${escapeHtml(it.text)}">
+        <div class="inline-edit-actions">
+          <button class="btn-cancel" onclick="cancelEditShopping()">取消</button>
+          <button class="btn-save" onclick="saveAutoShoppingEdit('${escapeQ(it.id)}')">儲存修改</button>
+        </div>
+      </div>` : ''}
+    </div>`;
+  });
+  html += '</div>';
+
+  html += '<div class="card"><div class="card-title">✏️ 自己新增的項目</div>';
+  if(customShoppingItems.length === 0){
+    html += `<div style="font-size:12.5px;color:var(--ink-soft);font-weight:600;padding:6px 0;">還沒有自訂項目，在下方新增吧！</div>`;
+  }
+  customShoppingItems.forEach(it=>{
+    const isDone = !!shoppingChecked[it.id];
+    const isEditing = editingShoppingId === it.id;
+    html += `<div class="shop-item ${isDone?'done':''}" style="flex-direction:column;align-items:stretch;">
+      <div style="display:flex;align-items:center;gap:11px;">
+        <div class="check-circle ${isDone?'checked':''}" onclick="toggleShopping('${escapeQ(it.id)}')">${isDone?'✓':''}</div>
+        <div class="shop-info">
+          <div class="shop-text">${escapeHtml(it.text)}</div>
+        </div>
+        <div class="item-actions">
+          <button class="icon-btn edit-btn" aria-label="編輯" onclick="toggleEditShopping('${escapeQ(it.id)}')">✏️</button>
+          <button class="icon-btn delete-btn" aria-label="刪除" onclick="deleteCustomShoppingItem('${escapeQ(it.id)}')">🗑️</button>
+        </div>
+      </div>
+      ${isEditing? `
+      <div class="inline-edit-form">
+        <input type="text" id="edit-shop-${escapeHtml(it.id)}" value="${escapeHtml(it.text)}">
+        <div class="inline-edit-actions">
+          <button class="btn-cancel" onclick="cancelEditShopping()">取消</button>
+          <button class="btn-save" onclick="saveCustomShoppingEdit('${escapeQ(it.id)}')">儲存修改</button>
+        </div>
+      </div>` : ''}
+    </div>`;
+  });
+  html += `<div class="shop-add-row">
+    <input type="text" id="shop-new-input" placeholder="新增想買的東西..." onkeydown="if(event.key==='Enter')addCustomShoppingItem()">
+    <button class="shop-add-btn" onclick="addCustomShoppingItem()">＋ 新增</button>
+  </div>`;
+  html += '</div>';
+
+  html += '</div>';
+  document.getElementById('tab-content').innerHTML = html;
+}
+
+function toggleShopping(id){
+  shoppingChecked[id] = !shoppingChecked[id];
+  saveToStorage(STORAGE_KEY_SHOPPING_CHECKED, shoppingChecked);
+  renderShopping();
+}
+
+function toggleEditShopping(id){
+  editingShoppingId = (editingShoppingId === id) ? null : id;
+  renderShopping();
+}
+
+function cancelEditShopping(){
+  editingShoppingId = null;
+  renderShopping();
+}
+
+function saveAutoShoppingEdit(id){
+  const input = document.getElementById('edit-shop-'+id);
+  const text = input.value.trim();
+  if(!text){ input.style.outline = '2px solid var(--red)'; return; }
+  let shoppingAutoEdits = loadFromStorage(STORAGE_KEY_SHOPPING_AUTO_EDITS, {});
+  shoppingAutoEdits[id] = text;
+  saveToStorage(STORAGE_KEY_SHOPPING_AUTO_EDITS, shoppingAutoEdits);
+  editingShoppingId = null;
+  renderShopping();
+}
+
+function deleteAutoShoppingItem(id){
+  let shoppingAutoDeletes = loadFromStorage(STORAGE_KEY_SHOPPING_AUTO_DELETES, {});
+  shoppingAutoDeletes[id] = true;
+  saveToStorage(STORAGE_KEY_SHOPPING_AUTO_DELETES, shoppingAutoDeletes);
+  delete shoppingChecked[id];
+  saveToStorage(STORAGE_KEY_SHOPPING_CHECKED, shoppingChecked);
+  editingShoppingId = null;
+  renderShopping();
+}
+
+function saveCustomShoppingEdit(id){
+  const input = document.getElementById('edit-shop-'+id);
+  const text = input.value.trim();
+  if(!text){ input.style.outline = '2px solid var(--red)'; return; }
+  const item = customShoppingItems.find(it=>it.id===id);
+  if(item) item.text = text;
+  saveToStorage(STORAGE_KEY_SHOPPING_CUSTOM, customShoppingItems);
+  editingShoppingId = null;
+  renderShopping();
+}
+
+function addCustomShoppingItem(){
+  const input = document.getElementById('shop-new-input');
+  const text = (input.value||'').trim();
+  if(!text) return;
+  customShoppingItems.push({id:'custom-' + Date.now(), text});
+  saveToStorage(STORAGE_KEY_SHOPPING_CUSTOM, customShoppingItems);
+  renderShopping();
+}
+
+function deleteCustomShoppingItem(id){
+  customShoppingItems = customShoppingItems.filter(it=>it.id!==id);
+  saveToStorage(STORAGE_KEY_SHOPPING_CUSTOM, customShoppingItems);
+  delete shoppingChecked[id];
+  saveToStorage(STORAGE_KEY_SHOPPING_CHECKED, shoppingChecked);
+  editingShoppingId = null;
+  renderShopping();
 }
 
 /* =========================================================
@@ -1174,20 +1650,18 @@ function renderExpense(){
     </div>
   </div>`;
 
-  // Horizontally-scrollable DAY1 8/20 style selector, app-style.
-  html += '<div class="day-tabs">';
-  allDayIds.forEach((dId, dIdx)=>{
+  // Horizontally-scrollable calendar-card selector, unified with the itinerary tab style.
+  html += '<div class="day-tabs-wrap"><div class="day-tabs">';
+  allDayIds.forEach((dId)=>{
     const active = currentExpenseDay === dId;
-    const fullLabel = dayLabels[dId] || dId;
-    const spaceIdx = fullLabel.indexOf(' ');
-    const dayPart = spaceIdx > -1 ? fullLabel.slice(0, spaceIdx) : fullLabel;
-    const datePart = spaceIdx > -1 ? fullLabel.slice(spaceIdx+1) : '';
+    const info = dayDateInfo[dId] || {weekday:'', date:'', month:''};
     html += `<button class="date-pill ${active?'active':''}" onclick="selectExpenseDay('${dId}')">
-      <span class="dp-daylabel">${dayPart}</span>
-      <span class="dp-date">${datePart}</span>
+      <span class="dp-weekday">${info.weekday}<sup>日</sup></span>
+      <span class="dp-date">${info.date}</span>
+      <span class="dp-month">${info.month}</span>
     </button>`;
   });
-  html += '</div>';
+  html += '</div></div>';
 
   const dId = currentExpenseDay;
   const entries = dailyExpenses[dId] || [];
@@ -1199,13 +1673,17 @@ function renderExpense(){
     </div>`;
   entries.forEach(e=>{
     const isEditing = editingExpenseId === e.id;
-    html += `<div class="expense-row" onclick="${isEditing? '' : `startEditExpense('${dId}','${e.id}')`}">
+    html += `<div class="expense-row">
       <div class="expense-icon">${expenseCategoryIcons[e.cat]||'💴'}</div>
       <div class="expense-info">
         <div class="expense-name">${escapeHtml(e.name)}</div>
         <div class="expense-payer">付款人：${e.payer}　・　${e.cat}</div>
       </div>
       <div class="expense-amt">¥${e.amount.toLocaleString()}</div>
+      <div class="item-actions">
+        <button class="icon-btn edit-btn" aria-label="編輯" onclick="event.stopPropagation();startEditExpense('${dId}','${e.id}')">✏️</button>
+        <button class="icon-btn delete-btn" aria-label="刪除" onclick="event.stopPropagation();deleteExpense('${dId}','${e.id}')">🗑️</button>
+      </div>
     </div>`;
     if(isEditing){
       html += `<div class="exp-form open" id="exp-edit-form-${e.id}" onclick="event.stopPropagation()">
@@ -1260,7 +1738,7 @@ function renderExpense(){
   html += '</div>';
 
   html += `<div class="card">
-    <div class="card-title cute">💱 日幣快速換算</div>
+    <div class="card-title">💱 日幣快速換算</div>
     <div class="convert-row">
       <input id="jpy-input" type="number" placeholder="輸入日幣金額 (JPY)" oninput="convertCurrency()">
     </div>
@@ -1269,6 +1747,7 @@ function renderExpense(){
 
   html += '</div>';
   document.getElementById('tab-content').innerHTML = html;
+  enableHorizontalScrollDrag('.day-tabs');
 }
 
 function selectExpenseDay(dId){
@@ -1412,6 +1891,7 @@ function switchTab(tab){
   document.getElementById('tab-content').classList.remove('lego-mode');
   if(tab==='itinerary') renderItinerary();
   else if(tab==='packing') renderPacking();
+  else if(tab==='shopping') renderShopping();
   else if(tab==='expense') renderExpense();
   else if(tab==='sos') renderSOS();
   window.scrollTo({top:0, behavior:'smooth'});
