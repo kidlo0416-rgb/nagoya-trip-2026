@@ -206,15 +206,28 @@ body{
 .activity-budget{margin-top:8px;font-size:12px;font-weight:700;color:#A1822E;background:var(--cream);display:inline-block;padding:5px 9px;border-radius:var(--r-sm);}
 .activity-footer{display:flex;justify-content:flex-end;margin-top:8px;}
 
-/* Edit/delete icon row, used across itinerary, packing, shopping, and expense items */
-.item-actions{display:flex;gap:6px;flex:0 0 auto;}
-.icon-btn{
-  width:28px;height:28px;border-radius:50%;border:none;background:var(--cream);
-  display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;
-  color:var(--ink-soft);flex:0 0 28px;transition:background .15s;
+/* Edit/delete actions, hidden behind a single "more" button to keep lists calm.
+   Tapping the dots reveals a small popover with edit/delete; tapping elsewhere closes it. */
+.item-actions{position:relative;flex:0 0 auto;}
+.more-btn{
+  width:26px;height:26px;border-radius:50%;border:none;background:transparent;
+  display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer;
+  color:var(--ink-soft);flex:0 0 26px;line-height:1;letter-spacing:1px;
 }
-.icon-btn.edit-btn:hover{background:var(--blue);}
-.icon-btn.delete-btn:hover{background:var(--pink);}
+.more-btn:hover{background:var(--line);}
+.more-popover{
+  display:none;position:absolute;top:30px;right:0;z-index:20;
+  background:#fff;border-radius:14px;box-shadow:0 6px 18px rgba(120,90,50,0.18);
+  padding:6px;gap:4px;flex-direction:column;min-width:96px;
+}
+.more-popover.open{display:flex;}
+.more-popover button{
+  display:flex;align-items:center;gap:7px;border:none;background:none;border-radius:9px;
+  padding:8px 10px;font-size:12.5px;font-weight:700;font-family:inherit;cursor:pointer;color:var(--ink);
+  white-space:nowrap;text-align:left;
+}
+.more-popover button:hover{background:var(--cream);}
+.more-popover button.danger{color:var(--red-deep);}
 .inline-edit-form{display:flex;flex-direction:column;gap:8px;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);}
 .inline-edit-form input, .inline-edit-form textarea{
   border:1.5px solid var(--line);border-radius:var(--r-sm);padding:9px 11px;font-size:13px;
@@ -966,6 +979,28 @@ function escapeQ(s){
 function escapeHtml(s){
   return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
+function safeDomId(s){
+  return (s||'').replace(/[^a-zA-Z0-9_-]/g, '_');
+}
+
+/* =========================================================
+   SHARED "MORE" POPOVER (⋯ → edit/delete)
+   A single function toggles any popover by id, closing all
+   others first so only one is ever open at a time. A document
+   click handler closes an open popover when tapping elsewhere.
+   ========================================================= */
+function toggleMorePopover(id, evt){
+  if(evt) evt.stopPropagation();
+  document.querySelectorAll('.more-popover').forEach(p=>{
+    if(p.id !== 'more-' + id) p.classList.remove('open');
+  });
+  const pop = document.getElementById('more-' + id);
+  if(pop) pop.classList.toggle('open');
+}
+document.addEventListener('click', (e)=>{
+  if(e.target.closest('.item-actions')) return;
+  document.querySelectorAll('.more-popover.open').forEach(p=>p.classList.remove('open'));
+});
 
 const TAG_META = {
   eat:{cls:'tag-eat', icon:'🍴', label:'必吃美食'},
@@ -1132,8 +1167,11 @@ function renderDay(day){
                 <div class="activity-title">${act.title}</div>
               </div>
               <div class="item-actions">
-                <button class="icon-btn edit-btn" aria-label="編輯" onclick="toggleEditActivity('${day.id}','${act.sortId}')">✏️</button>
-                <button class="icon-btn delete-btn" aria-label="刪除" onclick="deleteActivity('${day.id}','${act.sortId}')">🗑️</button>
+                <button class="more-btn" aria-label="更多操作" onclick="toggleMorePopover('act-${act.sortId}', event)">⋯</button>
+                <div class="more-popover" id="more-act-${act.sortId}">
+                  <button onclick="toggleEditActivity('${day.id}','${act.sortId}')">✏️ 編輯</button>
+                  <button class="danger" onclick="deleteActivity('${day.id}','${act.sortId}')">🗑️ 刪除</button>
+                </div>
               </div>
             </div>
             <div class="activity-desc">${act.desc||''}</div>
@@ -1394,8 +1432,11 @@ function renderPacking(){
           <div class="check-circle ${isDone?'checked':''}" onclick="togglePack('${it.key}')">${isDone?'✓':''}</div>
           <div class="pack-text">${escapeHtml(it.text)}</div>
           <div class="item-actions">
-            <button class="icon-btn edit-btn" aria-label="編輯" onclick="toggleEditPack('${it.key}')">✏️</button>
-            <button class="icon-btn delete-btn" aria-label="刪除" onclick="deletePackItem('${it.key}')">🗑️</button>
+            <button class="more-btn" aria-label="更多操作" onclick="toggleMorePopover('pack-${it.key}', event)">⋯</button>
+            <div class="more-popover" id="more-pack-${it.key}">
+              <button onclick="toggleEditPack('${it.key}')">✏️ 編輯</button>
+              <button class="danger" onclick="deletePackItem('${it.key}')">🗑️ 刪除</button>
+            </div>
           </div>
         </div>
         ${isEditing? `
@@ -1505,8 +1546,11 @@ function renderShopping(){
           <div class="shop-source">📍 ${escapeHtml(it.source)}</div>
         </div>
         <div class="item-actions">
-          <button class="icon-btn edit-btn" aria-label="編輯" onclick="toggleEditShopping('${escapeQ(it.id)}')">✏️</button>
-          <button class="icon-btn delete-btn" aria-label="刪除" onclick="deleteAutoShoppingItem('${escapeQ(it.id)}')">🗑️</button>
+          <button class="more-btn" aria-label="更多操作" onclick="toggleMorePopover('${escapeQ(safeDomId(it.id))}', event)">⋯</button>
+          <div class="more-popover" id="more-${safeDomId(it.id)}">
+            <button onclick="toggleEditShopping('${escapeQ(it.id)}')">✏️ 編輯</button>
+            <button class="danger" onclick="deleteAutoShoppingItem('${escapeQ(it.id)}')">🗑️ 刪除</button>
+          </div>
         </div>
       </div>
       ${isEditing? `
@@ -1535,8 +1579,11 @@ function renderShopping(){
           <div class="shop-text">${escapeHtml(it.text)}</div>
         </div>
         <div class="item-actions">
-          <button class="icon-btn edit-btn" aria-label="編輯" onclick="toggleEditShopping('${escapeQ(it.id)}')">✏️</button>
-          <button class="icon-btn delete-btn" aria-label="刪除" onclick="deleteCustomShoppingItem('${escapeQ(it.id)}')">🗑️</button>
+          <button class="more-btn" aria-label="更多操作" onclick="toggleMorePopover('${escapeQ(safeDomId(it.id))}', event)">⋯</button>
+          <div class="more-popover" id="more-${safeDomId(it.id)}">
+            <button onclick="toggleEditShopping('${escapeQ(it.id)}')">✏️ 編輯</button>
+            <button class="danger" onclick="deleteCustomShoppingItem('${escapeQ(it.id)}')">🗑️ 刪除</button>
+          </div>
         </div>
       </div>
       ${isEditing? `
@@ -1681,8 +1728,11 @@ function renderExpense(){
       </div>
       <div class="expense-amt">¥${e.amount.toLocaleString()}</div>
       <div class="item-actions">
-        <button class="icon-btn edit-btn" aria-label="編輯" onclick="event.stopPropagation();startEditExpense('${dId}','${e.id}')">✏️</button>
-        <button class="icon-btn delete-btn" aria-label="刪除" onclick="event.stopPropagation();deleteExpense('${dId}','${e.id}')">🗑️</button>
+        <button class="more-btn" aria-label="更多操作" onclick="event.stopPropagation();toggleMorePopover('exp-${safeDomId(e.id)}', event)">⋯</button>
+        <div class="more-popover" id="more-exp-${safeDomId(e.id)}">
+          <button onclick="startEditExpense('${dId}','${e.id}')">✏️ 編輯</button>
+          <button class="danger" onclick="deleteExpense('${dId}','${e.id}')">🗑️ 刪除</button>
+        </div>
       </div>
     </div>`;
     if(isEditing){
